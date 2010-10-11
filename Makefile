@@ -3,7 +3,7 @@ all: test
 clean:
 	@find . -name "*.pyc" -delete
 	
-dependencies: specloud coverage selenium flask shoulddsl lxml
+dependencies: specloud coverage selenium flask shoulddsl lxml mechanize
 
 specloud:
 	@python -c 'import specloud' 2>/dev/null || pip install --no-deps specloud -r http://github.com/hugobr/specloud/raw/master/requirements.txt
@@ -22,6 +22,9 @@ shoulddsl:
 
 lxml:
 	@python -c 'import lxml' 2>/dev/null || pip install lxml
+
+mechanize:
+	@python -c 'import mechanize' 2>/dev/null || pip install mechanize
 
 
 test: dependencies clean
