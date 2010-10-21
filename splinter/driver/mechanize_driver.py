@@ -43,7 +43,6 @@ class Mechanize(DriverAPI):
         return self.find_by_xpath('//%s' % tag)
         
     def find_by_name(self, name):
-        import pdb; pdb.set_trace()
         return self.find_by_xpath("*[//@name='%s']" % name)
 
     def find_link_by_href(self, href):
