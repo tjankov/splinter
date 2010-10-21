@@ -43,7 +43,7 @@ class Mechanize(DriverAPI):
         return self.find_by_xpath('//%s' % tag)
         
     def find_by_name(self, name):
-        return self.find_by_xpath("*[//@name='%s']" % name)
+        return self.find_by_xpath("//*[@name='%s']" % name)
 
     def find_link_by_href(self, href):
         return MechanizeLinkELement(self.driver.find_link(url=href))
@@ -71,6 +71,9 @@ class MechanizeElement(ElementAPI):
     
     @property
     def value(self):
+        if self._element.text_content() == '':
+            return self._element.value
+            
         return self._element.text_content()
 
     def __getitem__(self, attr):
