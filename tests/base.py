@@ -50,12 +50,7 @@ class BaseBrowserTests(object):
         "should find elements by name"
         value = self.browser.find_by_name('query').value
         value |should| equal_to('default value')
-    
-    def test_can_find_by_name(self):
-        "should find elements by name"
-        field = self.browser.find_by_name('query')
-        field.value |should| equal_to('default value')
-    
+        
     def test_finding_links_by_text(self):
         "should find links by text"
         link = self.browser.find_link_by_text('Link for Example.com')
