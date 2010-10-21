@@ -21,3 +21,11 @@
 #         "should evaluate script"
 #         assert self.browser.evaluate_script("4+4") == 8
 #         
+    # def test_can_verify_if_a_element_is_visible(self):
+    #     "should provide verify if element is visible"
+    #     self.browser.find_by_id("visible") |should| be_visible
+    # 
+    # def test_can_verify_if_a_element_is_invisible(self):
+    #     "should provide verify if element is invisible"
+    #     self.browser.find_by_id("invisible") |should_not| be_visible
+
