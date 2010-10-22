@@ -5,7 +5,6 @@ import mechanize
 import lxml.html as lhtml
 
 class Mechanize(DriverAPI):
-    pass
     
     def __init__(self):
         self.driver = mechanize.Browser()
