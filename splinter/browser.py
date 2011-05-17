@@ -1,5 +1,6 @@
 from splinter.driver.webdriver.firefox import WebDriver as FirefoxWebDriver
 from splinter.driver.webdriver.chrome import WebDriver as ChromeWebDriver
+from splinter.driver.zombie import ZombieDriver
 
 try:
     from splinter.driver.zopetestbrowser import ZopeTestBrowser
@@ -9,7 +10,8 @@ except ImportError:
 
 _DRIVERS = {
     'webdriver.firefox': FirefoxWebDriver,
-    'webdriver.chrome': ChromeWebDriver
+    'webdriver.chrome': ChromeWebDriver,
+    'zombie': ZombieDriver,
 }
 
 if has_zope_browser:
