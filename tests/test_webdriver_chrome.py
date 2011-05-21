@@ -4,7 +4,7 @@ from fake_webapp import EXAMPLE_APP
 from base import WebDriverTests
 from nose.tools import raises
 
-
+'''
 class ChromeBrowserTest(WebDriverTests, unittest.TestCase):
 
     @classmethod
@@ -38,3 +38,4 @@ class ChromeBrowserTest(WebDriverTests, unittest.TestCase):
         "should raise NotImplementedError when trying to access alerts/promps using 'with'"
         with self.browser.get_alert() as alert:
             pass
+'''

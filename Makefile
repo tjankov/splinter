@@ -27,5 +27,6 @@ which = 'tests'
 
 test: dependencies clean
 	@echo "Running all tests..."
-	specloud --nocapture --with-coverage --cover-erase --cover-inclusive --cover-package=splinter --tests=$(which)
+	#specloud --nocapture --with-coverage --cover-erase --cover-inclusive --cover-package=splinter --tests=$(which)
+	nosetests --nocapture --with-coverage --cover-erase --cover-inclusive --cover-package=splinter --tests=$(which)
 

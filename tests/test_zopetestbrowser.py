@@ -5,7 +5,7 @@ from base import BaseBrowserTests
 from fake_webapp import EXAMPLE_APP
 from nose.tools import raises
 
-
+'''
 class ZopeTestBrowserDriverTest(BaseBrowserTests, unittest.TestCase):
 
     @classmethod
@@ -33,3 +33,4 @@ class ZopeTestBrowserDriverTest(BaseBrowserTests, unittest.TestCase):
     def test_cant_switch_to_frame(self):
         "zope.testbrowser should not be able to switch to frames"
         self.browser.get_iframe('frame_123')
+'''
