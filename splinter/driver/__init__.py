@@ -1,7 +1,8 @@
 from splinter.element_list import ElementList
+from splinter.request_handler.request_handler import RequestHandler
 
 
-class DriverAPI(object):
+class DriverAPI(RequestHandler):
     @property
     def title(self):
         raise NotImplementedError
@@ -15,6 +16,12 @@ class DriverAPI(object):
         raise NotImplementedError
 
     def visit(self, url):
+        raise NotImplementedError
+
+    def back(self):
+        raise NotImplementedError
+
+    def forward(self):
         raise NotImplementedError
 
     def reload(self):
@@ -70,7 +77,7 @@ class DriverAPI(object):
     fill_in = fill
     attach_file = fill
 
-    def choose(self, name):
+    def choose(self, name, value):
         raise NotImplementedError
 
     def check(self, name):

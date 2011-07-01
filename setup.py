@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
-
+from splinter import __version__
 
 README = open('README.rst').read()
 
 setup(name='splinter',
-      version='0.0.4dev',
+      version=__version__,
       description='browser abstraction for web acceptance testing',
       long_description=README,
       author='CobraTeam',
@@ -12,6 +12,6 @@ setup(name='splinter',
       packages=find_packages(),
       include_package_data=True,
       test_suite='nose.collector',
-      install_requires=['selenium==2.0b3', 'lxml'],
+      install_requires=['selenium==2.0rc3', 'lxml'],
       tests_require=['nose', 'coverage', 'ludibrio', 'flask', 'specloud'],
       )

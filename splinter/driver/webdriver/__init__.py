@@ -1,18 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import time
 import logging
 import subprocess
+import time
 from contextlib import contextmanager
 
-from tempfile import TemporaryFile
 from lxml.cssselect import CSSSelector
-from selenium.common.exceptions import WebDriverException, NoSuchElementException
-from selenium.webdriver.firefox import firefox_profile
+from selenium.common.exceptions import NoSuchElementException
 
 from splinter.driver import DriverAPI, ElementAPI
 from splinter.element_list import ElementList
 from splinter.utils import warn_deprecated
+from tempfile import TemporaryFile
 
 
 class BaseWebDriver(DriverAPI):
@@ -23,18 +22,13 @@ class BaseWebDriver(DriverAPI):
 
     def _patch_subprocess(self):
         loggers_to_silence = [
-            'selenium.webdriver.firefox.utils',
-            'selenium.webdriver.firefox.firefoxlauncher',
-            'selenium.webdriver.firefox.firefox_profile',
-            'selenium.webdriver.remote.utils',
+            'selenium.webdriver.firefox.extension_connection',
             'selenium.webdriver.remote.remote_connection',
-            'addons.xpi',
-            'webdriver.ExtensionConnection',
+            'selenium.webdriver.remote.utils',
         ]
 
         class MutedHandler(logging.Handler):
-            def emit(self, record):
-                pass
+            pass
 
         for name in loggers_to_silence:
             logger = logging.getLogger(name)
@@ -51,10 +45,6 @@ class BaseWebDriver(DriverAPI):
 
         subprocess.Popen = MyPopen
 
-        # also patching firefox profile in order to NOT produce output
-        firefox_profile.FirefoxProfile. \
-            DEFAULT_PREFERENCES['extensions.logging.enabled'] = "false"
-
     def _unpatch_subprocess(self):
         # cleaning up the house
         subprocess.Popen = self.old_popen
@@ -65,14 +55,22 @@ class BaseWebDriver(DriverAPI):
 
     @property
     def html(self):
-        return self.driver.get_page_source()
+        return self.driver.page_source
 
     @property
     def url(self):
         return self.driver.current_url
 
     def visit(self, url):
+        self.connect(url)
+        self.ensure_success_response()
         self.driver.get(url)
+
+    def back(self):
+        self.driver.back()
+
+    def forward(self):
+        self.driver.forward()
 
     def reload(self):
         self.driver.refresh()
@@ -222,9 +220,11 @@ class BaseWebDriver(DriverAPI):
     fill_in = warn_deprecated(fill, 'fill_in')
     attach_file = fill
 
-    def choose(self, name):
-        field = self.find_by_name(name).first
-        field.click()
+    def choose(self, name, value):
+        fields = self.find_by_name(name)
+        for field in fields:
+            if field.value == value:
+                field.click()
 
     def check(self, name):
         field = self.find_by_name(name).first
@@ -235,7 +235,8 @@ class BaseWebDriver(DriverAPI):
         field.uncheck()
 
     def select(self, name, value):
-        self.find_by_xpath('//select[@name="%s"]/option[@value="%s"]' % (name, value)).first._element.select()
+        element = self.find_by_xpath('//select[@name="%s"]/option[@value="%s"]' % (name, value)).first._element
+        element.select()
 
     def quit(self):
         self.driver.quit()
@@ -248,9 +249,10 @@ class WebDriverElement(ElementAPI):
         self.parent = parent
 
     def _get_value(self):
-        try:
-            return self._element.value
-        except WebDriverException:
+        value = self["value"]
+        if value:
+            return value
+        else:
             return self._element.text
 
     def _set_value(self, value):
@@ -268,11 +270,11 @@ class WebDriverElement(ElementAPI):
 
     def check(self):
         if not self.checked:
-            self._element.toggle()
+            self._element.click()
 
     def uncheck(self):
         if self.checked:
-            self._element.toggle()
+            self._element.click()
 
     @property
     def checked(self):

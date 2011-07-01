@@ -12,9 +12,20 @@ class ZopeTestBrowser(DriverAPI):
 
     def __init__(self):
         self._browser = Browser()
+        self._last_urls = []
 
     def visit(self, url):
         self._browser.open(url)
+
+    def back(self):
+        self._last_urls.insert(0, self.url)
+        self._browser.goBack()
+
+    def forward(self):
+        try:
+            self.visit(self._last_urls.pop())
+        except IndexError:
+            pass
 
     def reload(self):
         self._browser.reload()
@@ -97,11 +108,13 @@ class ZopeTestBrowser(DriverAPI):
 
     fill_in = warn_deprecated(fill, 'fill_in')
 
-    def choose(self, name):
+    def choose(self, name, value):
+        control = self._browser.getControl(name=name)
+        control.value = [option for option in control.options if option == value]
+
+    def check(self, name):
         control = self._browser.getControl(name=name)
         control.value = control.options
-
-    check = choose
 
     def uncheck(self, name):
         control = self._browser.getControl(name=name)

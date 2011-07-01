@@ -55,8 +55,8 @@ EXAMPLE_HTML = """\
         <input type="text" name="query" value="default last value" />
         <label for="send">Send</label>
         <input type="submit" name="send" />
-        <input type="radio" name="some-radio" value="choice" />
-        <input type="radio" name="other-radio" value="other-choice" />
+        <input type="radio" name="gender" value="M" id="gender-m" /> Male
+        <input type="radio" name="gender" value="F" id="gender-f" /> Female
         <input type="checkbox" name="some-check" value="choice" />
         <input type="checkbox" name="checked-checkbox" value="choosed" checked="checked" />
         <select name="uf">
@@ -65,15 +65,15 @@ EXAMPLE_HTML = """\
         </select>
     </form>
     <form action="/upload" method="POST" enctype="multipart/form-data">
-        <input type="file" name="file"> 
+        <input type="file" name="file">
         <input type="submit" name="upload" />
     </form>
-    <a href="http://example.com">Link for Example.com</a>
+    <a href="http://example.com/">Link for Example.com</a>
     <a href="http://example.com/last">Link for Example.com</a>
-    <a href="http://example.com">Link for last Example.com</a>
+    <a href="http://example.com/">Link for last Example.com</a>
     <div id="visible">visible</div>
     <div id="invisible" style="display:none">invisible</div>
-    <a href="/foo">FOO</a>
+    <a href="http://localhost:5000/foo">FOO</a>
     <a class='add-async-element' href="#">add async element</a>
     <a class='remove-async-element' href="#">remove async element</a>
     <a class='add-element-mouseover' href="#">addelement (mouseover)</a>
@@ -99,7 +99,7 @@ EXAMPLE_ALERT_HTML = """\
     <script type="text/javascript">
       $(document).ready(function(){
         $('.alerta').click(function() { alert('This is an alert example.'); });
-        
+
         $('.pergunta').click(function() { nome = prompt('What is your name?'); alert(nome); });
       })
     </script>
@@ -108,7 +108,7 @@ EXAMPLE_ALERT_HTML = """\
     <h1 class="alerta">Alert Example Title</h1>
     <h2 class="pergunta">Prompt Example Subtitle</h2>
   </body>
-</html>  
+</html>
 """
 
 app = Flask(__name__)
@@ -128,7 +128,7 @@ def alertd():
 @app.route('/name', methods=['GET'])
 def get_name():
     return "My name is: Master Splinter"
-    
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -142,7 +142,7 @@ def upload_file():
 @app.route('/foo')
 def foo():
     return "BAR!"
-    
+
 class Env(object):
     pass
 
