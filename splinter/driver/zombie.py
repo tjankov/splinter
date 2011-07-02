@@ -24,4 +24,5 @@ class ZombieDriver(DriverAPI):
     def html(self):
         return socket_send('browser.html()') 
 
-
+    def quit(self):
+        pass
