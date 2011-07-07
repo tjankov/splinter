@@ -18,7 +18,7 @@ def socket_send(message):
 class ZombieDriver(DriverAPI):
 
     def visit(self, url):
-        socket_send('browser.visit("%s")' % url)
+        socket_send('browser.window.location = "%s";' % url)
 
     @property
     def html(self):

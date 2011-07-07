@@ -1,6 +1,7 @@
 var net = require('net');
 var zombie = require('zombie');
 var browser = null;
+var buffer = '';
 
 /*net.createServer(function (stream) {
   stream.setEncoding('utf8');
@@ -19,29 +20,30 @@ var browser = null;
   });
 }).listen(8042, 'localhost');*/
 
-var net = require("net");
   
 var server = net.createServer(function (stream) {
-  stream.setEncoding("utf8");
+  stream.allowHalfOpen = true;
+  //stream.setEncoding("utf8");
 
-  stream.on("connect", function () {
-      if (browser == null) {
-        browser = new zombie.Browser();
-      }
-  });
-  
   stream.on("data", function (data) {
-    console.log('executing ' + data);
-    var result = eval(data);
-    console.log('writing ' + data);
-    stream.write(result); 
+    //browser = new zombie.Browser();
+    //console.log('executing ' + data);
+    //var result = eval(data);
+    //console.log('writing ' + result);
+    //stream.write(result);
+    buffer += data;
+    console.log('data', buffer);
   });
 
-  stream.execute = function(data) {
-  }     
-  
   stream.on("end", function () {
-    stream.end();
+    console.log('end');
+    
+    if (browser === null) {
+      browser = new zombie.Browser();
+    }
+    eval(buffer);
+    buffer = "";
+    //stream.end();
   });
 });
 server.listen(8042, "localhost");

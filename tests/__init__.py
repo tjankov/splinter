@@ -7,4 +7,5 @@ def setup():
     start_server()
 
 def teardown():
-    stop_server()
+    pass
+    #stop_server()
