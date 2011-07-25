@@ -1,5 +1,3 @@
-import os
-import unittest
 from splinter.browser import Browser
 from base import BaseBrowserTests
 from fake_webapp import EXAMPLE_APP
@@ -7,7 +5,10 @@ from fake_webapp import EXAMPLE_APP
 '''
 from nose.tools import assert_equals, raises
 
->>>>>>> 0857b83a4b2d52089eb6309ab3480d0664af717f
+import os
+import unittest
+
+
 class ZopeTestBrowserDriverTest(BaseBrowserTests, unittest.TestCase):
 
     @classmethod

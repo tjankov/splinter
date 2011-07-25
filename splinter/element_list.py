@@ -1,7 +1,7 @@
 from splinter.exceptions import ElementDoesNotExist
 
-class ElementList(list):
 
+class ElementList(list):
     def __init__(self, list, context=None, driver=None):
         self.extend(list)
         self.context = context
@@ -25,4 +25,10 @@ class ElementList(list):
         return self.driver.find_by_css(element)
 
     def is_empty(self):
-        return not len(self)
+        return len(self) == 0
+
+    def __getattr__(self, name):
+        try:
+            return getattr(self.first, name)
+        except (ElementDoesNotExist, AttributeError):
+            raise AttributeError("'%s' object has no attribute '%s'" % (self.__class__.__name__, name))

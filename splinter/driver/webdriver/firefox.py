@@ -5,6 +5,8 @@ import subprocess
 from selenium.webdriver import Firefox
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from splinter.driver.webdriver import BaseWebDriver, WebDriverElement
+from splinter.driver.webdriver.cookie_manager import CookieManager
+
 
 class WebDriver(BaseWebDriver):
     old_popen = subprocess.Popen
@@ -18,5 +20,7 @@ class WebDriver(BaseWebDriver):
         self._unpatch_subprocess()
 
         self.element_class = WebDriverElement
+
+        self._cookie_manager = CookieManager(self.driver)
 
         super(WebDriver, self).__init__()

@@ -1,6 +1,9 @@
+from nose.tools import assert_equals
+from splinter.driver import ElementAPI
+from splinter.element_list import ElementList
+
 import warnings
 
-from nose.tools import assert_equals
 
 class FindElementsTest(object):
 
@@ -170,3 +173,43 @@ class FindElementsTest(object):
         "should find links by href"
         link = self.browser.find_link_by_href('http://example.com/').first
         assert_equals('http://example.com/', link['href'])
+
+    def test_find_by_css_in_element_context(self):
+        "should find elements by css in element context and should return splinter driver element"
+        elements = self.browser.find_by_css("#inside")
+        decendent = elements[0].find_by_css('h2')
+        assert_equals(decendent.first.text.strip(), 'inside')
+        assert isinstance(decendent, ElementList)
+        assert isinstance(decendent[0], ElementAPI)
+
+    def test_find_by_xpath_in_element_context(self):
+        "should find elements by xpath in element context"
+        elements = self.browser.find_by_css("#inside")
+        decendent = elements[0].find_by_xpath("//h2")
+        assert_equals(decendent.first.text.strip(), 'inside')
+        assert isinstance(decendent, ElementList)
+        assert isinstance(decendent[0], ElementAPI)
+
+    def test_find_by_name_in_element_context(self):
+        "should find elements by name in element context"
+        elements = self.browser.find_by_css("#inside")
+        decendent = elements[0].find_by_name("upload")
+        assert_equals(len(decendent), 1)
+        assert isinstance(decendent, ElementList)
+        assert isinstance(decendent[0], ElementAPI)
+
+    def test_find_by_tag_in_element_context(self):
+        "should find elements by tag in element context"
+        elements = self.browser.find_by_css("#inside")
+        decendent = elements[0].find_by_tag("input")
+        assert_equals(len(decendent), 1)
+        assert isinstance(decendent, ElementList)
+        assert isinstance(decendent[0], ElementAPI)
+
+    def test_find_by_id_in_element_context(self):
+        "should find elements by id in element context"
+        elements = self.browser.find_by_css("#inside")
+        decendent = elements[0].find_by_id("visible")
+        assert_equals(len(decendent), 1)
+        assert isinstance(decendent, ElementList)
+        assert isinstance(decendent[0], ElementAPI)

@@ -1,6 +1,5 @@
 from nose.tools import assert_equals, assert_true, assert_false
 from fake_webapp import EXAMPLE_APP
-
 from find_elements import FindElementsTest
 from form_elements import FormElementsTest
 from click_elements import ClickElementsTest
@@ -11,9 +10,10 @@ from status_code import StatusCodeTest
 from async_finder import AsyncFinderTests
 from is_text_present import IsTextPresentTest
 from within_elements import WithinElementsTest
+from cookies import CookiesTest
 
 
-class BaseBrowserTests(FindElementsTest, FormElementsTest, ClickElementsTest, WithinElementsTest):
+class BaseBrowserTests(FindElementsTest, FormElementsTest, ClickElementsTest, WithinElementsTest, CookiesTest):
 
     def setUp(self):
         self.fail("You should set up your browser in the setUp() method")
@@ -76,6 +76,7 @@ class BaseBrowserTests(FindElementsTest, FormElementsTest, ClickElementsTest, Wi
         "element should contains the browser on \"parent\" attribute"
         element = self.browser.find_by_id("firstheader").first
         assert_equals(self.browser, element.parent)
+
 
 class WebDriverTests(BaseBrowserTests, IFrameElementsTest, ElementDoestNotExistTest, IsElementPresentTest, AsyncFinderTests, IsTextPresentTest, StatusCodeTest):
 

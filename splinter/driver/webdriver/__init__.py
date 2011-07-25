@@ -236,10 +236,14 @@ class BaseWebDriver(DriverAPI):
 
     def select(self, name, value):
         element = self.find_by_xpath('//select[@name="%s"]/option[@value="%s"]' % (name, value)).first._element
-        element.select()
+        element.click()
 
     def quit(self):
         self.driver.quit()
+
+    @property
+    def cookies(self):
+        return self._cookie_manager
 
 
 class WebDriverElement(ElementAPI):
@@ -285,6 +289,26 @@ class WebDriverElement(ElementAPI):
     @property
     def visible(self):
         return self._element.is_displayed()
+
+    def find_by_css(self, selector):
+        elements = self._element.find_elements_by_css_selector(selector)
+        return ElementList([self.__class__(element, self) for element in elements])
+
+    def find_by_xpath(self, selector):
+        elements = ElementList(self._element.find_elements_by_xpath(selector))
+        return ElementList([self.__class__(element, self) for element in elements])
+
+    def find_by_name(self, name):
+        elements = ElementList(self._element.find_elements_by_name(name))
+        return ElementList([self.__class__(element, self) for element in elements])
+
+    def find_by_tag(self, tag):
+        elements = ElementList(self._element.find_elements_by_tag_name(tag))
+        return ElementList([self.__class__(element, self) for element in elements])
+
+    def find_by_id(self, id):
+        elements = ElementList(self._element.find_elements_by_id(id))
+        return ElementList([self.__class__(element, self) for element in elements])
 
     def __getitem__(self, attr):
         return self._element.get_attribute(attr)
