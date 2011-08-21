@@ -1,19 +1,23 @@
+# -*- coding: utf-8 -*-
 from nose.tools import assert_equals, assert_true, assert_false
+
+from async_finder import AsyncFinderTests
+from click_elements import ClickElementsTest
+from cookies import CookiesTest
+from element_does_not_exist import ElementDoestNotExistTest
 from fake_webapp import EXAMPLE_APP
 from find_elements import FindElementsTest
 from form_elements import FormElementsTest
-from click_elements import ClickElementsTest
-from element_does_not_exist import ElementDoestNotExistTest
-from is_element_present import IsElementPresentTest
 from iframes import IFrameElementsTest
-from status_code import StatusCodeTest
-from async_finder import AsyncFinderTests
+from is_element_present import IsElementPresentTest
 from is_text_present import IsTextPresentTest
+from mouse_interaction import MouseInteractionTest
+from status_code import StatusCodeTest
+from type import SlowlyTypeTest
 from within_elements import WithinElementsTest
-from cookies import CookiesTest
 
 
-class BaseBrowserTests(FindElementsTest, FormElementsTest, ClickElementsTest, WithinElementsTest, CookiesTest):
+class BaseBrowserTests(FindElementsTest, FormElementsTest, ClickElementsTest, WithinElementsTest, CookiesTest, SlowlyTypeTest):
 
     def setUp(self):
         self.fail("You should set up your browser in the setUp() method")
@@ -78,7 +82,7 @@ class BaseBrowserTests(FindElementsTest, FormElementsTest, ClickElementsTest, Wi
         assert_equals(self.browser, element.parent)
 
 
-class WebDriverTests(BaseBrowserTests, IFrameElementsTest, ElementDoestNotExistTest, IsElementPresentTest, AsyncFinderTests, IsTextPresentTest, StatusCodeTest):
+class WebDriverTests(BaseBrowserTests, IFrameElementsTest, ElementDoestNotExistTest, IsElementPresentTest, AsyncFinderTests, IsTextPresentTest, StatusCodeTest, MouseInteractionTest):
 
     def test_can_execute_javascript(self):
         "should be able to execute javascript"
@@ -100,3 +104,31 @@ class WebDriverTests(BaseBrowserTests, IFrameElementsTest, ElementDoestNotExistT
     def test_default_wait_time_should_be_2(self):
         "should driver default wait time 2"
         assert_equals(2, self.browser.wait_time)
+
+    def test_access_alerts_and_accept_them(self):
+        self.browser.visit(EXAMPLE_APP + 'alert')
+        self.browser.find_by_tag('h1').first.click()
+        alert = self.browser.get_alert()
+        assert_equals('This is an alert example.', alert.text)
+        alert.accept()
+
+    def test_access_prompts_and_be_able_to_fill_then(self):
+        self.browser.visit(EXAMPLE_APP + 'alert')
+        self.browser.find_by_tag('h2').first.click()
+
+        alert = self.browser.get_alert()
+        assert_equals('What is your name?', alert.text)
+        alert.fill_with('Splinter')
+        alert.accept()
+
+        response = self.browser.get_alert()
+        assert_equals('Splinter', response.text)
+        response.accept()
+
+    def test_access_alerts_using_with(self):
+        "should access alerts using 'with' statement"
+        self.browser.visit(EXAMPLE_APP + 'alert')
+        self.browser.find_by_tag('h1').first.click()
+        with self.browser.get_alert() as alert:
+            assert_equals('This is an alert example.', alert.text)
+            alert.accept()

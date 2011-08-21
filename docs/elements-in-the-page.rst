@@ -30,8 +30,8 @@ or
 Clicking links
 --------------
 
-You can click in links. To click in links by href or text you can use this.
-IMPORTANT: This methods return the first element always.
+You can click in links. To click in links by href, text or partial text you can use this.
+IMPORTANT: These methods return the first element always.
 
 .. highlight:: python
 
@@ -46,6 +46,14 @@ or
 ::
 
     browser.click_link_by_text('my link')
+
+or
+
+.. highlight:: python
+
+::
+
+    browser.click_link_by_partial_text('part of link text')
 
 
 Clicking buttons
@@ -82,6 +90,27 @@ Interacting with forms
     browser.uncheck('some-check')
     browser.select('uf', 'rj')
 
+To trigger JavaScript events, like KeyDown or KeyUp, you can use the `type` method.
+
+.. highlight:: python
+
+::
+
+    browser.type('type', 'typing text')
+
+
+If you pass the argument `slowly=True` to the `type` method you can interact with the
+page on every key pressed. Useful for testing field's autocompletion (the browser
+will wait until next iteration to type the subsequent key).
+
+.. highlight:: python
+
+::
+
+    for key in browser.type('type', 'typing slowly', slowly=True):
+        // you can do some test of a field autocompletion here
+
+
 Verifying if element is visible or invisible
 --------------------------------------------
 
@@ -114,3 +143,4 @@ You can invoke any ``Element`` method on ``ElementList`` and it will be proxied 
 
     assert browser.find_by_css('a.banner').first.visible
     assert browser.find_by_css('a.banner').visible
+

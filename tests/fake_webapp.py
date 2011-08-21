@@ -14,7 +14,7 @@ EXAMPLE_HTML = """\
         $(document).ready(function() {
            $(".add-async-element").click(function() {
                 setTimeout(function() {
-                    $('body').append('<h4 id="async-header" class="async-element">async elment</h4>');
+                    $('body').append('<h4 id="async-header" value="async-header-value" class="async-element">async elment</h4>');
                     $('body').append('<input type="text" name="async-input" class="async-input" />');
                 }, 1200 );
                 setTimeout(function() {
@@ -74,6 +74,7 @@ EXAMPLE_HTML = """\
     <div id="visible">visible</div>
     <div id="invisible" style="display:none">invisible</div>
     <a href="http://localhost:5000/foo">FOO</a>
+    <a href="http://localhost:5000/foo">A wordier (and last) link to FOO</a>
     <a class='add-async-element' href="#">add async element</a>
     <a class='remove-async-element' href="#">remove async element</a>
     <a class='add-element-mouseover' href="#">addelement (mouseover)</a>
@@ -81,7 +82,7 @@ EXAMPLE_HTML = """\
     <div id="inside">
         <h2>inside</h2>
         <form>
-            <input id="visible" name="upload" type="text" />
+            <input id="visible" name="upload" type="text" value="crazy diamond" />
         </form>
     </div>
   </body>
@@ -117,6 +118,34 @@ EXAMPLE_ALERT_HTML = """\
 </html>
 """
 
+EXAMPLE_TYPE_HTML = """\
+<html>
+    <head>
+        <script type="text/javascript">
+        window.onload = function(f) {
+            var number = 0;
+            var name_input = document.getElementById('type-input-id');
+            name_input.onkeyup = function(e) {
+                showSuggest();
+            };
+            function showSuggest() {
+                var hidden_suggest = document.getElementById('suggest');
+                hidden_suggest.innerHTML += 'Hi, I am here #' + number + '! ';
+                number++;
+            };
+        };
+        </script>
+    </head>
+    <body>
+        <form method="GET" action="">
+            <input name="type-input" value="" id="type-input-id"/>
+        </form>
+
+        <span id="suggest"></span>
+    </body>
+</html>
+"""
+
 app = Flask(__name__)
 
 
@@ -133,6 +162,11 @@ def iframed():
 @app.route('/alert')
 def alertd():
     return EXAMPLE_ALERT_HTML
+
+
+@app.route('/type')
+def type():
+    return EXAMPLE_TYPE_HTML
 
 
 @app.route('/name', methods=['GET'])
@@ -202,3 +236,6 @@ def start_server():
 def stop_server():
     env.process.terminate()
     wait_until_stop()
+
+if __name__ == '__main__':
+    app.run()

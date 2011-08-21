@@ -1,7 +1,7 @@
 import os
 import unittest
 
-from nose.tools import assert_equals
+from nose.tools import raises
 from splinter.browser import Browser
 from fake_webapp import EXAMPLE_APP
 from base import WebDriverTests
@@ -30,12 +30,10 @@ class FirefoxBrowserTest(WebDriverTests, unittest.TestCase):
         assert 'text/plain' in html
         assert open(file_path).read() in html
 
-    def test_access_alerts_and_accept_them(self):
-        self.browser.visit(EXAMPLE_APP + 'alert')
-        self.browser.find_by_tag('h1').first.click()
-        alert = self.browser.get_alert()
-        assert_equals('This is an alert example.', alert.text)
-        alert.accept()
+    @raises(NotImplementedError)
+    def test_mouse_over(self):
+        "Firefox should not support mouseover"
+        self.browser.find_by_id('visible').first.mouseover()
 
     def test_acess_alerts_and_dismiss_them(self):
         self.browser.visit(EXAMPLE_APP + 'alert')
@@ -64,4 +62,8 @@ class FirefoxBrowserTest(WebDriverTests, unittest.TestCase):
         with self.browser.get_alert() as alert:
             assert_equals('This is an alert example.', alert.text)
             alert.accept()
+    @raises(NotImplementedError)
+    def test_mouse_out(self):
+        "Firefox should not support mouseout"
+        self.browser.find_by_id('visible').first.mouseout()
 '''

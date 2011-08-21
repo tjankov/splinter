@@ -1,8 +1,7 @@
+import warnings
 from nose.tools import assert_equals
 from splinter.driver import ElementAPI
 from splinter.element_list import ElementList
-
-import warnings
 
 
 class FindElementsTest(object):
@@ -34,6 +33,12 @@ class FindElementsTest(object):
         "should find elements by tag"
         value = self.browser.find_by_tag('h1').first.value
         assert_equals('Example Header', value)
+
+    def test_finding_by_value(self):
+        "should find elements by value"
+        value = self.browser.find_by_value('M').first.value
+        id = self.browser.find_by_id('gender-m')
+        assert_equals(id.first.value ,value)
 
     def test_finding_by_id(self):
         "should find elements by id"
@@ -80,6 +85,16 @@ class FindElementsTest(object):
         link = self.browser.find_link_by_href('http://example.com/')[0]
         assert_equals('http://example.com/', link['href'])
 
+    def test_finding_all_links_by_partial_href(self):
+        "should find links by partial href"
+        link = self.browser.find_link_by_partial_href('example.c')[0]
+        assert_equals('http://example.com/', link['href'])
+
+    def test_finding_all_links_by_partial_text(self):
+        "should find links by partial text"
+        link = self.browser.find_link_by_partial_text('FOO')[0]
+        assert_equals('http://localhost:5000/foo', link['href'])
+
     def test_finding_last_element_by_css(self):
         "should find last element by css"
         value = self.browser.find_by_css('h1').last.value
@@ -121,6 +136,16 @@ class FindElementsTest(object):
         "should find last link by href"
         link = self.browser.find_link_by_href('http://example.com/').last
         assert_equals('Link for last Example.com', link.text)
+
+    def test_finding_link_by_partial_href(self):
+        "should find links by partial href"
+        link = self.browser.find_link_by_partial_href('example.c').last
+        assert_equals('Link for last Example.com', link.text)
+
+    def test_finding_last_link_by_partial_text(self):
+        "should find last link by partial text"
+        link = self.browser.find_link_by_partial_text('FOO').last
+        assert_equals('A wordier (and last) link to FOO', link.text)
 
     def test_finding_element_by_css_using_slice(self):
         "should find element by css using slice"
@@ -210,6 +235,14 @@ class FindElementsTest(object):
         "should find elements by id in element context"
         elements = self.browser.find_by_css("#inside")
         decendent = elements[0].find_by_id("visible")
+        assert_equals(len(decendent), 1)
+        assert isinstance(decendent, ElementList)
+        assert isinstance(decendent[0], ElementAPI)
+
+    def test_find_by_value_in_element_context(self):
+        "should find elements by value in element context"
+        elements = self.browser.find_by_css("#inside")
+        decendent = elements[0].find_by_value("crazy diamond")
         assert_equals(len(decendent), 1)
         assert isinstance(decendent, ElementList)
         assert isinstance(decendent[0], ElementAPI)

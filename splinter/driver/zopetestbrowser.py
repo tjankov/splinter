@@ -18,12 +18,13 @@ class CookieManager(CookieManagerAPI):
         for key, value in cookies.items():
             self._cookies[key] = value
 
-    def delete(self, cookie=None):
-        if cookie:
-            try:
-                del self._cookies[cookie]
-            except KeyError:
-                pass
+    def delete(self, *cookies):
+        if cookies:
+            for cookie in cookies:
+                try:
+                    del self._cookies[cookie]
+                except KeyError:
+                    pass
         else:
             self._cookies.clearAll()
 
@@ -77,21 +78,21 @@ class ZopeTestBrowser(DriverAPI):
         html = lxml.html.fromstring(self.html)
         element = html.xpath('//option[@value="%s"]' % value)[0]
         control = self._browser.getControl(element.text)
-        return ElementList([ZopeTestBrowserOptionElement(control, self)])
+        return ElementList([ZopeTestBrowserOptionElement(control, self)], find_by="value", query=value)
 
     def find_option_by_text(self, text):
         html = lxml.html.fromstring(self.html)
         element = html.xpath('//option[normalize-space(text())="%s"]' % text)[0]
         control = self._browser.getControl(element.text)
-        return ElementList([ZopeTestBrowserOptionElement(control, self)])
+        return ElementList([ZopeTestBrowserOptionElement(control, self)], find_by="text", query=text)
 
     def find_by_css(self, selector):
         xpath = CSSSelector(selector).path
-        return self.find_by_xpath(xpath)
+        return self.find_by_xpath(xpath, original_find="css", original_selector=selector)
 
     find_by_css_selector = warn_deprecated(find_by_css, 'find_by_css_selector')
 
-    def find_by_xpath(self, xpath):
+    def find_by_xpath(self, xpath, original_find=None, original_selector=None):
         html = lxml.html.fromstring(self.html)
 
         elements = []
@@ -104,13 +105,19 @@ class ZopeTestBrowser(DriverAPI):
             else:
                 elements.append(xpath_element)
 
-        return ElementList([ZopeTestBrowserElement(element, self) for element in elements])
+        find_by = original_find or "xpath"
+        query = original_selector or xpath
+
+        return ElementList([ZopeTestBrowserElement(element, self) for element in elements], find_by=find_by, query=query)
 
     def find_by_tag(self, tag):
-        return self.find_by_xpath('//%s' % tag)
+        return self.find_by_xpath('//%s' % tag, original_find="tag", original_selector=tag)
+
+    def find_by_value(self, value):
+        return self.find_by_xpath('//*[@value="%s"]' % value, original_find="value", original_selector=value)
 
     def find_by_id(self, id_value):
-        return self.find_by_xpath('//*[@id="%s"][1]' % id_value)
+        return self.find_by_xpath('//*[@id="%s"][1]' % id_value, original_find="id", original_selector=id_value)
 
     def find_by_name(self, name):
         elements = []
@@ -123,13 +130,19 @@ class ZopeTestBrowser(DriverAPI):
                 index += 1
             except IndexError:
                 break
-        return ElementList([ZopeTestBrowserControlElement(element, self) for element in elements])
+        return ElementList([ZopeTestBrowserControlElement(element, self) for element in elements], find_by="name", query=name)
 
     def find_link_by_text(self, text):
         return self._find_links_by_xpath("//a[text()='%s']" % text)
 
     def find_link_by_href(self, href):
         return self._find_links_by_xpath("//a[@href='%s']" % href)
+
+    def find_link_by_partial_href(self, partial_href):
+        return self._find_links_by_xpath("//a[contains(@href, '%s')]" % partial_href)
+
+    def find_link_by_partial_text(self, partial_text):
+        return self._find_links_by_xpath("//a[contains(text(), '%s')]" % partial_text)
 
     def fill(self, name, value):
         self.find_by_name(name=name).first._control.value = value
@@ -156,7 +169,7 @@ class ZopeTestBrowser(DriverAPI):
     def _find_links_by_xpath(self, xpath):
         html = lxml.html.fromstring(self.html)
         links = html.xpath(xpath)
-        return ElementList([ZopeTestBrowserLinkElement(link, self) for link in links])
+        return ElementList([ZopeTestBrowserLinkElement(link, self) for link in links], find_by="xpath", query=xpath)
 
     def select(self, name, value):
         self.find_by_name(name).first._control.value = [value]
@@ -197,6 +210,10 @@ class ZopeTestBrowserElement(ElementAPI):
         elements = self._element.cssselect(name)
         return ElementList([self.__class__(element, self) for element in elements])
 
+    def find_by_value(self, value):
+        elements = self._element.cssselect('[value="%s"]' % value)
+        return ElementList([self.__class__(element, self) for element in elements])
+
     def find_by_id(self, id):
         elements = self._element.cssselect('#%s' % id)
         return ElementList([self.__class__(element, self) for element in elements])
@@ -218,9 +235,6 @@ class ZopeTestBrowserLinkElement(ZopeTestBrowserElement):
 
     def __getitem__(self, attr):
         return super(ZopeTestBrowserLinkElement, self).__getitem__(attr)
-
-    def __getattr__(self, attr):
-        return getattr(self._element, attr)
 
     def click(self):
         return self._browser.open(self["href"])
@@ -267,3 +281,4 @@ class ZopeTestBrowserOptionElement(ElementAPI):
     @property
     def selected(self):
         return self._control.mech_item._selected
+

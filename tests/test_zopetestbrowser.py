@@ -44,4 +44,24 @@ class ZopeTestBrowserDriverTest(BaseBrowserTests, unittest.TestCase):
     def test_cant_switch_to_frame(self):
         "zope.testbrowser should not be able to switch to frames"
         self.browser.get_iframe('frame_123')
+
+    @raises(NotImplementedError)
+    def test_simple_type(self):
+        "zope.testbrowser won't support type method because it doesn't interact with Javascritp, and this is the meaning of that method"
+        self.browser.type('query',' with type method')
+
+    @raises(NotImplementedError)
+    def test_slowly_typing(self):
+        "zope.testbrowser won't support type method because it doesn't interact with Javascritp, and this is the meaning of that method"
+        self.browser.type('query',' with type method', slowly=True)
+
+    @raises(NotImplementedError)
+    def test_cant_mouseover(self):
+        "zope.testbrowser should not be able to put the mouse over the element"
+        self.browser.find_by_css('#visible').first.mouseover()
+
+    @raises(NotImplementedError)
+    def test_cant_mouseout(self):
+        "zope.testbrowser should not be able to mouse out of an element"
+        self.browser.find_by_css('#visible').first.mouseout()
 '''
