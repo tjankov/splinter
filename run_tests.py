@@ -47,7 +47,7 @@ def wait_until_stop():
 
 
 def start_server():
-    sys.stderr = open('/dev/null', 'w')
+    sys.stderr = open('delete_me.txt', 'w')
     env.process = Process(target=start_flask_app, args=(env.host, env.port))
     env.process.daemon = True
     env.process.start()
