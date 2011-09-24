@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import logging
+import platform
 import subprocess
 import time
 from contextlib import contextmanager
@@ -44,7 +45,8 @@ class BaseWebDriver(DriverAPI):
             kw['close_fds'] = True
             return self.old_popen(*args, **kw)
 
-        subprocess.Popen = MyPopen
+        if platform.system() != 'Windows':
+            subprocess.Popen = MyPopen
 
     def _unpatch_subprocess(self):
         # cleaning up the house
