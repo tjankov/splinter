@@ -75,7 +75,7 @@ class BrowserDeprecationTest(unittest.TestCase):
             from splinter.browser import Browser
             browser = Browser('webdriver.firefox')
             browser.quit()
-            warning_message = warnings_list[0].message.args[0]
+            warning_message = warnings_list[-1].message.args[0]
             self.assertEquals("'webdriver.firefox' is deprecated, use just 'firefox'", warning_message)
 
     def test_webdriverchrome_should_be_deprecated(self):
@@ -84,5 +84,5 @@ class BrowserDeprecationTest(unittest.TestCase):
             from splinter.browser import Browser
             browser = Browser('webdriver.chrome')
             browser.quit()
-            warning_message = warnings_list[0].message.args[0]
+            warning_message = warnings_list[-1].message.args[0]
             self.assertEquals("'webdriver.chrome' is deprecated, use just 'chrome'", warning_message)
