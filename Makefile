@@ -42,7 +42,7 @@ test: dependencies clean
 	@rm -f delete_me*
 
 wintest: dependencies
-	@echo "Running all tests on windows platform..."
-	@python run_tests.py -w tests/test_webdriver_ie.py
+	@echo "Running tests on windows platform..."
+	@python run_tests.py -w tests/test_browser,tests/test_element_list,tests/test_meta,tests/test_request_handler,tests/test_webdriver_ie,tests/test_zopetestbrowser
 	@echo
 	@rm -f delete_me*
