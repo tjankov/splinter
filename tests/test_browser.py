@@ -43,6 +43,11 @@ class BrowserTest(unittest.TestCase):
             from splinter.browser import Browser
             Browser('unknown-driver')
 
+    def test_should_identify_IE_by_the_string_ie(self):
+        from splinter.driver.webdriver.ie import WebDriver
+        from splinter import browser
+        self.assertEquals(WebDriver, browser._DRIVERS['ie'])
+
 
 class BrowserDeprecationTest(unittest.TestCase):
 
