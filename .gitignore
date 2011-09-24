@@ -17,3 +17,5 @@ dist/*
 *.swn
 *.swo
 *.DS_Store
+*~
+delete_me.txt

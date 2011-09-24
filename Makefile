@@ -1,5 +1,5 @@
 clean:
-	@find . -name "*.pyc" -delete
+	@find . -name "*.pyc" -exec rm -rf {} \;
 
 doc_dependencies: sphinx
 
@@ -39,3 +39,10 @@ test: dependencies clean
 	@coverage run run_tests.py -w $(which)
 	@coverage report
 	@echo
+	@rm -f delete_me*
+
+wintest: dependencies
+	@echo "Running all tests on windows platform..."
+	@python run_tests.py -w tests/test_webdriver_ie.py
+	@echo
+	@rm -f delete_me*
