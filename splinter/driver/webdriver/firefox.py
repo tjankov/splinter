@@ -13,7 +13,8 @@ class WebDriver(BaseWebDriver):
     def __init__(self, profile=None, extensions=None):
         self.old_popen = subprocess.Popen
         firefox_profile = FirefoxProfile(profile)
-        firefox_profile.set_preference('extensions.logging.enabled', 'false')
+        firefox_profile.set_preference('extensions.logging.enabled', False)
+        firefox_profile.set_preference('network.dns.disableIPv6', False)
 
         if extensions:
             for extension in extensions:
@@ -32,14 +33,35 @@ class WebDriver(BaseWebDriver):
 
 class WebDriverElement(BaseWebDriverElement):
 
-    def mouseover(self):
+    def mouse_over(self):
         """
         Firefox doesn't support mouseover.
         """
         raise NotImplementedError("Firefox doesn't support mouse over")
 
-    def mouseout(self):
+    def mouse_out(self):
         """
         Firefox doesn't support mouseout.
         """
         raise NotImplementedError("Firefox doesn't support mouseout")
+
+    def double_click(self):
+        """
+        Firefox doesn't support doubleclick.
+        """
+        raise NotImplementedError("Firefox doesn't support doubleclick")
+
+    def right_click(self):
+        """
+        Firefox doesn't support right click'
+        """
+        raise NotImplementedError("Firefox doesn't support right click")
+
+    def drag_and_drop(self, droppable):
+        """
+        Firefox doesn't support drag and drop
+        """
+        raise NotImplementedError("Firefox doesn't support drag an drop")
+
+    mouseover = mouse_over
+    mouseout = mouse_out

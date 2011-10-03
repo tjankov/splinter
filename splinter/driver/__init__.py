@@ -13,6 +13,7 @@ class DriverAPI(RequestHandler):
     Basic driver API class.
     """
     __metaclass__ = InheritedDocs
+    driver_name = None
 
     @property
     def title(self):
@@ -79,7 +80,7 @@ class DriverAPI(RequestHandler):
 
         For more details, check the :doc:`docs about iframes, alerts and prompts </iframes-and-alerts>`
         """
-        raise NotImplementedError
+        raise NotImplementedError("%s does not support frames" % self.driver_name)
 
     def execute_script(self, script):
         """
@@ -107,8 +108,6 @@ class DriverAPI(RequestHandler):
         current page content.
         """
         raise NotImplementedError
-
-    find_by_css_selector = find_by_css
 
     def find_by_xpath(self, xpath):
         """
@@ -201,7 +200,7 @@ class DriverAPI(RequestHandler):
         """
         Searchs for ``text`` in the browser and wait the seconds specified in ``wait_time``.
 
-        Retunrs True if finds a match for the ``text`` and False if not.
+        Returns True if finds a match for the ``text`` and False if not.
         """
         raise NotImplementedError
 
@@ -218,9 +217,6 @@ class DriverAPI(RequestHandler):
         Fill the field identified by ``name`` with the content specified by ``value``.
         """
         raise NotImplementedError
-
-    fill_in = fill
-    attach_file = fill
 
     def choose(self, name, value):
         """
@@ -309,7 +305,100 @@ class DriverAPI(RequestHandler):
         """
         raise NotImplementedError
 
-    def is_element_present(self, finder, selector, wait_time=None):
+    def is_element_present_by_css(self, css_selector, wait_time=None):
+        """
+        Verify if the element is present in the current page by css, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is present and False if is not present.
+        """
+        raise NotImplementedError
+
+    def is_element_not_present_by_css(self, css_selector, wait_time=None):
+        """
+        Verify if the element is not present in the current page by css, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is not present and False if is present.
+        """
+        raise NotImplementedError
+
+    def is_element_present_by_xpath(self, xpath, wait_time=None):
+        """
+        Verify if the element is present in the current page by xpath, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is present and False if is not present.
+        """
+        raise NotImplementedError
+
+    def is_element_not_present_by_xpath(self, xpath, wait_time=None):
+        """
+        Verify if the element is not present in the current page by xpath, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is not present and False if is present.
+        """
+        raise NotImplementedError
+
+    def is_element_present_by_tag(self, tag, wait_time=None):
+        """
+        Verify if the element is present in the current page by tag, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is present and False if is not present.
+        """
+        raise NotImplementedError
+
+    def is_element_not_present_by_tag(self, tag, wait_time=None):
+        """
+        Verify if the element is not present in the current page by tag, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is not present and False if is present.
+        """
+        raise NotImplementedError
+
+    def is_element_present_by_name(self, name, wait_time=None):
+        """
+        Verify if the element is present in the current page by name, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is present and False if is not present.
+        """
+        raise NotImplementedError
+
+    def is_element_not_present_by_name(self, name, wait_time=None):
+        """
+        Verify if the element is not present in the current page by name, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is not present and False if is present.
+        """
+        raise NotImplementedError
+
+    def is_element_present_by_value(self, value, wait_time=None):
+        """
+        Verify if the element is present in the current page by value, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is present and False if is not present.
+        """
+        raise NotImplementedError
+
+    def is_element_not_present_by_value(self, value, wait_time=None):
+        """
+        Verify if the element is not present in the current page by value, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is not present and False if is present.
+        """
+        raise NotImplementedError
+
+    def is_element_present_by_id(self, id, wait_time=None):
+        """
+        Verify if the element is present in the current page by id, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is present and False if is not present.
+        """
+        raise NotImplementedError
+
+    def is_element_not_present_by_id(self, id, wait_time=None):
+        """
+        Verify if the element is present in the current page by id, and wait the specified time in ``wait_time``.
+
+        Returns True if the element is not present and False if is present.
+        """
         raise NotImplementedError
 
     @property
@@ -391,13 +480,13 @@ class ElementAPI(object):
         """
         raise NotImplementedError
 
-    def mouseover(self):
+    def mouse_over(self):
         """
         Puts the mouse over the element.
         """
         raise NotImplementedError
 
-    def mouseout(self):
+    def mouse_out(self):
         """
         Moves the mouse away from the element.
         """
@@ -405,4 +494,3 @@ class ElementAPI(object):
 
     def __getitem__(self, attribute):
         raise NotImplementedError
-
