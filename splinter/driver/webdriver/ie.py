@@ -7,6 +7,7 @@ from splinter.driver.webdriver.cookie_manager import CookieManager
 
 
 class WebDriver(BaseWebDriver):
+
     def __init__(self, *args, **kwargs):
         self.driver = IE()
 
