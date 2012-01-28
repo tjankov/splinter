@@ -15,7 +15,7 @@ class FirefoxBrowserTest(WebDriverTests, unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.browser = Browser('firefox')
+        cls.browser = Browser("firefox")
 
     @classmethod
     def tearDownClass(cls):
