@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from splinter.driver.webdriver.chrome import WebDriver as ChromeWebDriver
 from splinter.driver.webdriver.firefox import WebDriver as FirefoxWebDriver
+from splinter.driver.webdriver.remote import WebDriver as RemoteWebDriver
+from splinter.driver.webdriver.chrome import WebDriver as ChromeWebDriver
 from splinter.driver.webdriver.ie import WebDriver as IEWebDriver
 from splinter.exceptions import DriverNotFoundError
 from splinter.utils import deprecate_driver_class
@@ -8,6 +9,7 @@ from splinter.utils import deprecate_driver_class
 
 _DRIVERS = {
     'firefox': FirefoxWebDriver,
+    'remote': RemoteWebDriver,
     'chrome': ChromeWebDriver,
     'ie': IEWebDriver,
     'webdriver.chrome': deprecate_driver_class(ChromeWebDriver, message="'webdriver.chrome' is deprecated, use just 'chrome'"),

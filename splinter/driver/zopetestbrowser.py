@@ -1,3 +1,5 @@
+from __future__ import with_statement
+
 from lxml.cssselect import CSSSelector
 from zope.testbrowser.browser import Browser
 from splinter.element_list import ElementList
@@ -45,6 +47,12 @@ class ZopeTestBrowser(DriverAPI):
 
         self._cookie_manager = CookieManager(self._browser.cookies)
         self._last_urls = []
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        pass
 
     def visit(self, url):
         self._browser.open(url)
@@ -152,7 +160,7 @@ class ZopeTestBrowser(DriverAPI):
         for name, value in field_values.items():
             element = self.find_by_name(name)
             control = element.first._control
-            if control.type == 'text':
+            if control.type in ['text', 'textarea']:
                 control.value = value
             elif control.type == 'checkbox':
                 if value:
